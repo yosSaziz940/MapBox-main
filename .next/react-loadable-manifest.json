@@ -1,0 +1,24 @@
+{
+  "app\\page.js -> @mapbox/search-js-react": {
+    "id": "app\\page.js -> @mapbox/search-js-react",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_mapbox_search-js-react_dist_index-esm_js.js"
+    ]
+  },
+  "app\\page.js -> react-map-gl": {
+    "id": "app\\page.js -> react-map-gl",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_react-map-gl_dist_esm_index_js.js"
+    ]
+  },
+  "node_modules\\next\\dist\\client\\components\\react-dev-overlay\\utils\\use-websocket.js -> @vercel/turbopack-ecmascript-runtime/browser/dev/hmr-client/hmr-client.ts": {
+    "id": "node_modules\\next\\dist\\client\\components\\react-dev-overlay\\utils\\use-websocket.js -> @vercel/turbopack-ecmascript-runtime/browser/dev/hmr-client/hmr-client.ts",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_next_dist_client_dev_noop-turbopack-hmr_js.js"
+    ]
+  },
+  "node_modules\\react-map-gl\\dist\\esm\\exports-mapbox.js -> mapbox-gl": {
+    "id": "node_modules\\react-map-gl\\dist\\esm\\exports-mapbox.js -> mapbox-gl",
+    "files": []
+  }
+}
