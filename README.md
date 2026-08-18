@@ -71,6 +71,39 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | `npm test`      | Run the Jest test suite      |
 | `npm run lint`  | Run ESLint checks            |
 
+## Verify
+
+To confirm a clean install, test, and build cycle from a bare clone:
+
+```sh
+# Clone repository
+git clone https://github.com/your-username/MapBox-main.git
+cd MapBox-main
+
+# Install dependencies
+npm ci
+
+# Set up environment (required for build)
+cp .env.example .env.local
+# Edit .env.local and add your NEXT_PUBLIC_MAPBOX_TOKEN
+
+# Run full verification
+npm run lint          # Check code quality
+npm run format:check  # Verify formatting
+npm run typecheck     # Type check
+npm test -- --coverage  # Run tests with coverage enforcement (70% threshold)
+npm run build         # Verify production build succeeds
+```
+
+All steps must pass with a green exit code. If any step fails, verify:
+
+- Node.js version >= 18 (`node --version`)
+- npm version >= 9 (`npm --version`)
+- `.env.local` contains a valid `NEXT_PUBLIC_MAPBOX_TOKEN`
+- No uncommitted changes in the working directory
+
+**Coverage Thresholds:** All code files must meet minimum coverage thresholds (70% branches, functions, lines, statements). See `jest.config.js` for details.
+
 ## Architecture
 
 ```
@@ -119,6 +152,40 @@ Build and run the application in a container:
 docker build --build-arg NEXT_PUBLIC_MAPBOX_TOKEN=pk.your_token -t mapbox-app .
 docker run -p 3000:3000 mapbox-app
 ```
+
+## Logging
+
+The application includes structured logging via `lib/logger.js`. All error paths and key operations are instrumented with the `createLogger` factory:
+
+```javascript
+import { createLogger } from "../lib/logger";
+
+const logger = createLogger("my-module");
+
+logger.debug("Operation started", { context });
+logger.info("Operation completed");
+logger.warn("Unexpected condition", { detail });
+logger.error("Operation failed", { error: e.message });
+```
+
+Logs are emitted to the browser console with a consistent `[MapBox] [module-name]` prefix and structured context object. All error scenarios in `app/page.js` automatically log to aid debugging and production monitoring.
+
+## Testing & Coverage
+
+Run the test suite with coverage:
+
+```sh
+npm test -- --coverage
+```
+
+Coverage reports are generated in `coverage/`. The project enforces **70% minimum coverage** across:
+
+- Branches
+- Functions
+- Lines
+- Statements
+
+All new features and bug fixes must include corresponding tests to maintain or improve coverage. See `__tests__/` directory for examples.
 
 ## Contributing
 
