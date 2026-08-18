@@ -1,31 +1,31 @@
 {
   "app\\page.js -> @mapbox/search-js-react": {
-    "id": 3641,
+    "id": 9738,
     "files": [
-      "static/chunks/3beab2b6.1a21526f527f157d.js",
-      "static/chunks/387.ccec15cb780ea35e.js"
+      "static/chunks/3beab2b6.8354ab3808ca5df4.js",
+      "static/chunks/277.bf0cdbb16a1672db.js"
     ]
   },
   "app\\page.js -> react-map-gl": {
-    "id": 967,
+    "id": 8531,
     "files": [
-      "static/chunks/967.8ca6da224d962ff5.js"
+      "static/chunks/531.a7b141ae4b7a5e84.js"
     ]
   },
   "node_modules\\next\\dist\\client\\index.js -> ../pages/_app": {
-    "id": 472,
+    "id": 5139,
     "files": [
-      "static/chunks/472.a3826d29d6854395.js"
+      "static/chunks/139.7a5a8e93a21948c1.js"
     ]
   },
   "node_modules\\next\\dist\\client\\index.js -> ../pages/_error": {
-    "id": 9341,
+    "id": 1646,
     "files": [
-      "static/chunks/341.2903e54d3da731c1.js"
+      "static/chunks/646.f342b7cffc01feb0.js"
     ]
   },
   "node_modules\\react-map-gl\\dist\\esm\\exports-mapbox.js -> mapbox-gl": {
-    "id": 5411,
+    "id": 7856,
     "files": []
   }
 }

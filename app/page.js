@@ -6,6 +6,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import { geocodeAddress } from "../lib/geocode";
 import { highlightNearestBuilding } from "../lib/buildingHighlight";
+import { addBuildingLayers } from "../lib/mapLayers";
+import { useMapView } from "../lib/useMapView";
 import MapControls from "../components/MapControls";
 
 const AddressAutofill = dynamic(
@@ -22,10 +24,9 @@ export default function Home() {
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
   const [isClient, setIsClient] = useState(false);
-  const [bearing, setBearing] = useState(-20);
-  const [pitch, setPitch] = useState(60);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
+  const { bearing, pitch, updateMapView } = useMapView();
 
   useEffect(() => {
     setIsClient(true);
@@ -52,23 +53,15 @@ export default function Home() {
 
       markerRef.current = new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map);
 
-      map.flyTo({
-        center: [lng, lat],
-        zoom: 18,
-        pitch: pitch,
-        bearing: bearing,
-      });
-
+      map.flyTo({ center: [lng, lat], zoom: 18, pitch, bearing });
       highlightNearestBuilding(map, lng, lat);
     }
   };
 
-  const updateMapView = (newBearing, newPitch) => {
-    setBearing(newBearing);
-    setPitch(newPitch);
+  const handleViewChange = (newBearing, newPitch) => {
+    updateMapView(newBearing, newPitch);
     if (mapRef.current) {
-      const map = mapRef.current.getMap();
-      map.flyTo({ bearing: newBearing, pitch: newPitch });
+      mapRef.current.getMap().flyTo({ bearing: newBearing, pitch: newPitch });
     }
   };
 
@@ -109,7 +102,7 @@ export default function Home() {
         mapRef={mapRef}
         bearing={bearing}
         pitch={pitch}
-        onViewChange={updateMapView}
+        onViewChange={handleViewChange}
       />
 
       <div className="w-full h-screen">
@@ -120,56 +113,13 @@ export default function Home() {
               longitude: location?.lng || -118.031,
               latitude: location?.lat || 33.977,
               zoom: 18,
-              pitch: pitch,
-              bearing: bearing,
+              pitch,
+              bearing,
             }}
             style={{ width: "100%", height: "100%" }}
             mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
             mapboxAccessToken={MAPBOX_TOKEN}
-            onLoad={(e) => {
-              const map = e.target;
-
-              if (!map.getLayer("3d-buildings")) {
-                map.addLayer({
-                  id: "3d-buildings",
-                  source: "composite",
-                  "source-layer": "building",
-                  type: "fill-extrusion",
-                  minzoom: 15,
-                  paint: {
-                    "fill-extrusion-color": [
-                      "case",
-                      ["boolean", ["feature-state", "highlighted"], false],
-                      "#ff0000",
-                      "#aaa",
-                    ],
-                    "fill-extrusion-height": ["get", "height"],
-                    "fill-extrusion-opacity": 0.6,
-                  },
-                });
-              }
-
-              if (!map.getLayer("housenum-label")) {
-                map.addLayer({
-                  id: "housenum-label",
-                  type: "symbol",
-                  source: "composite",
-                  "source-layer": "housenum_label",
-                  minzoom: 19,
-                  layout: {
-                    "text-field": ["get", "house_num"],
-                    "text-size": 18,
-                    "text-anchor": "center",
-                    "text-allow-overlap": true,
-                  },
-                  paint: {
-                    "text-color": "#000000",
-                    "text-halo-color": "#ffffff",
-                    "text-halo-width": 2,
-                  },
-                });
-              }
-            }}
+            onLoad={(e) => addBuildingLayers(e.target)}
           />
         )}
       </div>

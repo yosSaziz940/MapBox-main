@@ -9,6 +9,20 @@ const customConfig = {
   moduleNameMapper: {
     "^mapbox-gl$": "<rootDir>/__mocks__/mapbox-gl.js",
   },
+  collectCoverage: true,
+  collectCoverageFrom: [
+    "lib/**/*.js",
+    "components/**/*.js",
+    "app/**/*.js",
+    "!app/layout.js",
+  ],
+  coverageThreshold: {
+    global: {
+      lines: 70,
+      functions: 70,
+    },
+  },
+  coverageReporters: ["text", "lcov"],
 };
 
 module.exports = createJestConfig(customConfig);
