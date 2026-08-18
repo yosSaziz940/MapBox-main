@@ -16,7 +16,7 @@
     "next": "^15.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-map-gl": "^7.1.9"
+    "react-map-gl": "^8.1.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
