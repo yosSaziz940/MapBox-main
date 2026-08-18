@@ -9,6 +9,9 @@ import { highlightNearestBuilding } from "../lib/buildingHighlight";
 import { addBuildingLayers } from "../lib/mapLayers";
 import { useMapView } from "../lib/useMapView";
 import MapControls from "../components/MapControls";
+import { createLogger } from "../lib/logger";
+
+const logger = createLogger("app/page");
 
 const AddressAutofill = dynamic(
   () => import("@mapbox/search-js-react").then((mod) => mod.AddressAutofill),
@@ -34,12 +37,21 @@ export default function Home() {
 
   const handleSearch = async () => {
     setError(null);
+    logger.debug("Search initiated", { address });
+
     const result = await geocodeAddress(address, MAPBOX_TOKEN);
 
     if (!result.ok) {
-      setError(result.error);
+      const errorMessage = result.error;
+      setError(errorMessage);
+      logger.error("Geocoding failed", {
+        address,
+        error: errorMessage,
+      });
       return;
     }
+
+    logger.info("Geocoding succeeded", { address });
 
     const { lng, lat } = result;
     setLocation({ lat, lng });
@@ -57,6 +69,7 @@ export default function Home() {
 
       map.flyTo({ center: [lng, lat], zoom: 18, pitch, bearing });
       highlightNearestBuilding(map, lng, lat);
+      logger.debug("Map view updated", { lng, lat, zoom: 18, bearing, pitch });
     }
   };
 
